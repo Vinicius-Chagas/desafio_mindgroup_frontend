@@ -37,7 +37,7 @@ export default function Item(){
     return (
         <>
             {products.map( (product:any) => (
-                <div key={product.id} className="flex flex-col justify-center  ">
+                <div key={product.id} className="flex flex-col justify-center">
                     <div
                         className="relative flex flex-row md:space-x-5 space-y-3 md:space-y-0 rounded-xl shadow-lg p-3 md:w-2/4 w-2/3 max-h-[100px] mx-auto border border-white bg-white min-w-[400px] ">
                             
