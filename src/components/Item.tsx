@@ -1,11 +1,24 @@
+import Link from "next/link";
 import { HiOutlineTrash, HiPencilAlt } from "react-icons/hi";
 
-const getProducts = async () => {
+type product = {
+    id:number;
+    nome:string;
+    descricao:string;
+    valor:string;
+    imagem: {type:string, data: number[]};
+    total:number;
+}
+
+
+
+const getEstoque = async () => {
+
     try {
-        const res = await fetch("http://localhost:8080/products", {
-            method: "GET",
+        const res = await fetch("http://localhost:8080/productsEstoque", {
+            cache: "no-store",
             headers: {
-                "Content-Type": "application/json",
+                    'content-type': 'application/json'
             }
         })
 
@@ -19,55 +32,79 @@ const getProducts = async () => {
     }
 }
 
-export default function Item(){
+function convertImage(data:number[]):string{
+    const imgBuffer = Buffer.from(data);
+    const img64 = imgBuffer.toString("base64");
+    return `data:image/jpeg;base64,${img64}`;
+}
 
-    const products  = [
-        {id:1},
-        {id:2},
-        {id:3},
-        {id:4},
-        {id:5},
-        {id:6},
-        {id:7},
-        {id:8},
-        {id:9},
-        {id:10}
-    ];
+
+export default async function Item(){
+
+    const response  = await getEstoque();
+
+    const products:product[] = response.estoque;
+
+    const teste = [...products, ...products, ...products, ...products];
+
+    const removeProduct = async(id:number) => {
+        const confirmed = confirm("Realmente deseja deletar este produto?");
+    
+        if(confirmed){
+            const res = await fetch(`http://localhost:8080/product/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                    }
+                }
+            );
+    
+            if(res.ok){
+                const response  = await getEstoque();
+
+                const products:product[] = response.estoque;
+            }
+            
+        }
+    }
+
 
     return (
         <>
-            {products.map( (product:any) => (
+            {teste.map( (product:product) => (
+                
                 <div key={product.id} className="flex flex-col justify-center">
                     <div
-                        className="relative flex flex-row md:space-x-5 space-y-3 md:space-y-0 rounded-xl shadow-lg p-3 md:w-2/4 w-2/3 max-h-[100px] mx-auto border border-white bg-white min-w-[400px] ">
+                        className="relative flex flex-row items-center justify-center min-[1000px]:space-x-5 space-y-3 min-[1000px]:space-y-0 rounded-xl 
+                        shadow-lg p-3 w-2/4 max-h-[100px] mx-auto border border-white bg-white min-w-[400px] ">
                             
-                        <div className="hidden md:block w-1/5 md:w-2/3 bg-white grid place-items-center">
-                            <img src="https://images.pexels.com/photos/4381392/pexels-photo-4381392.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=100" alt="tailwind logo" className="rounded-xl size-[80px]" />
+                        <div className="hidden min-[400px]:block w-2/5 place-items-center">
+                            <img src={product.imagem != null ? convertImage(product.imagem.data) : ""} alt="tailwind logo" className="rounded-xl aspect-square min-w-[60px]" />
                         </div>
 
-                        <div className="w-1/4 md:w-2/3 w-1/5 bg-white flex flex-col space-y-2 p-3 justify-center">
+                        <div className="w-1/4 min-[400px]:w-2/3 w-1/5 bg-white flex flex-col space-y-2 p-3 justify-center">
                             
-                            <p className="md:text-xl text-gray-500 text-base">Flour</p>
-                            
-                        </div>
-                        <div className="w-1/4 md:w-2/3 w-1/5 bg-white flex flex-col space-y-2 p-3 justify-center">
-                            
-                            
-                        <p className="text-xl font-black text-gray-800">
-                                85
-                                <span className="font-normal text-gray-600 text-base">/100</span>
-                            </p>
+                            <p className="min-[400px]:text-xl text-gray-500 text-base">{product.nome}</p>
                             
                         </div>
-                        <div className="w-1/4 md:w-2/3 w-1/5 bg-white flex flex-col space-y-2 p-3 justify-center">
+                        <div className="w-1/4 min-[400px]:w-2/3 w-1/5 bg-white flex flex-col space-y-2 p-3 justify-center">
                             
                             
-                            <p className="md:text-lg text-gray-500 text-base">R$ 10,99</p>
+                        <p className="text-xl font-black text-gray-800 text-center">{product.total || 0}</p>
                             
                         </div>
-                        <div className="w-1/4 md:w-2/3 w-1/5 bg-white flex flex-row space-y-2 p-3 place-items-center justify-content-between">
-                            <HiPencilAlt className="md:w-[40px] w-[30px] size-14 "/>
-                            <HiOutlineTrash className="md:w-[40px] w-[30px] size-14 "/>
+                        <div className="w-1/4 min-[400px]:w-2/3 w-1/5 bg-white flex flex-col space-y-2 p-3 justify-center">
+                            
+                            
+                            <p className="min-[400px]:text-lg text-gray-500 text-base text-center">R$ {product.valor}</p>
+                            
+                        </div>
+                        <div className="w-1/4 min-[400px]:w-2/3 w-1/5 bg-white flex flex-row space-y-2 p-3 items-center justify-content-between gap-2">
+                            <Link href={`/attProduto/${product.id}`}>
+                                <HiPencilAlt className="min-[400px]:w-[35px] w-[30px] size-full pt-2 cursor-pointer" />
+                            </Link>
+                            
+                            <HiOutlineTrash className="min-[400px]:w-[35px] w-[30px] size-full cursor-pointer" color="red"  onClick={(e) => removeProduct(product.id)}/>
                         </div>
                     </div>
                 </div>

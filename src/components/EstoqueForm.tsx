@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import Cookies from 'js-cookie';
+import { useRouter } from "next/navigation";
+import { useContext, useState } from "react";
  
 type product = {
     id: number;
@@ -13,16 +15,16 @@ type product = {
 }
 
     export default function EstoqueForm({productsPromise}:{productsPromise:product[]}){
+    const router = useRouter();
 
     const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
     const [selectedOperation, setSelectedOperation] = useState<number | null>(null);
     const [products, setProducts] = useState<product[]>(productsPromise);
     const [total, setTotal] = useState<string>("");
 
-    const handleSubmit2: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
 
         e.preventDefault();
-
 
         console.log({selectedProductId, selectedOperation, total});
 
@@ -37,8 +39,7 @@ type product = {
           const res = await fetch('http://localhost:8080/estoque', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsImlhdCI6MTcxMzc0MzQ1MywiZXhwIjoxNzEzNzUwNjUzfQ.CC7hF63fEuIEGKxahlu950xbQjkCBOu41uVTd_7E8RY` 
+                'Content-Type': 'application/json' 
               },
             body: JSON.stringify({
                 idString: selectedProductId,
@@ -52,6 +53,7 @@ type product = {
           }
           else {
             alert('Estoque registrado com sucesso');
+            router.push("/home")
           }
         
         } catch (error) {
@@ -63,7 +65,7 @@ type product = {
         <div className="w-full min-h-screen bg-gray-50 flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
         <div className="w-full sm:max-w-md p-5 mx-auto">
 
-          <form onSubmit={handleSubmit2}>
+          <form onSubmit={handleSubmit}>
             <div className="mb-4">
                 <label className="block mb-1" htmlFor="product">Produto</label>
                 <select 

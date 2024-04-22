@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Header from "@/components/HeaderHome";
-import { useRouter } from "next/router";
-import fs from 'fs';
+import { useRouter } from "next/navigation";
 
 type product = {
     id:number;
@@ -15,6 +14,9 @@ type product = {
 
 
 export default function AttProdutoForm({product}:{product:product}){
+
+    const router = useRouter();
+  
 
     const [newNome, setNome] = useState<string>(product.nome);
     const [newDescricao, setDescricao] = useState<string>(product.descricao);
@@ -53,7 +55,7 @@ export default function AttProdutoForm({product}:{product:product}){
             method: 'PUT',
             body: formData,
             headers: {
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsImlhdCI6MTcxMzczNjA2OSwiZXhwIjoxNzEzNzQzMjY5fQ.VQjXLSqNKKwcwJ6Ie_QGmReYynqYzJuKxTcRU9M5f0w` 
+              'content-type': 'application/json'
               }
           })
   
@@ -62,7 +64,7 @@ export default function AttProdutoForm({product}:{product:product}){
           }
           else {
             alert('Produto atualizado com sucesso');
-            console.log( await res.json());
+            router.push("/home");
           }
         
         } catch (error) {

@@ -1,6 +1,5 @@
 
 import EstoqueForm from "@/components/EstoqueForm";
-import { useState } from "react";
 
 type product = {
     id: number;
@@ -17,7 +16,7 @@ const getProducts = async () => {
         const res = await fetch("http://localhost:8080/products", {
             cache: "no-store",
             headers: {
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsImlhdCI6MTcxMzc0MzQ1MywiZXhwIjoxNzEzNzUwNjUzfQ.CC7hF63fEuIEGKxahlu950xbQjkCBOu41uVTd_7E8RY`
+                'content-type': 'application/json'
             },
         })
 
@@ -32,6 +31,8 @@ const getProducts = async () => {
 }
 
 export default async function Estoque(){
+
+
     const response = await getProducts();
 
     const thisProducts:product[] = response.products;

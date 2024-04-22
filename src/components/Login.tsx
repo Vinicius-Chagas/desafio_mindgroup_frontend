@@ -1,16 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useRouter } from "next/navigation"
+import { AuthContext } from "../app/provider/AuthProvider";
+import {setCookie, parseCookies} from 'nookies'
+
 
 export default function Login(){
   const router = useRouter();
 
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
+  const { login } = useContext(AuthContext);
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
       e.preventDefault();
+
+ 
       if(!email || !senha){
         alert("Todos os campos são obrigatórios");
         return;
@@ -32,8 +38,15 @@ export default function Login(){
           throw new Error('Falha ao registrar usuário');
         }
         else {
-          alert('Login bem sucedido');
-          console.log( await res.json());
+          
+          const data = await res.json();
+          setCookie(undefined,'auth_token', data.token); 
+          const cookies = parseCookies();
+
+          console.log({teste:cookies});
+    
+          router.push("/home");
+          
         }
       
       } catch (error) {

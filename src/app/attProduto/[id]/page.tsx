@@ -1,4 +1,6 @@
-import AttProdutoForm from "@/components/AttProduto";
+import Cookies from 'js-cookie';
+import AttProdutoForm from "@/components/AttProdutoForm";
+import { useRouter } from "next/router";
 
 type attProductParams = {
     id: number;
@@ -12,27 +14,28 @@ type product = {
     imagem: {type:string, data: number[]};
 }
 
-const getProductById = async (id: number) => {
-    try {
-        const res = await fetch(`http://localhost:8080/product/${id}`, {
-            cache: "no-store",
-            headers: {
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsImlhdCI6MTcxMzczNjA2OSwiZXhwIjoxNzEzNzQzMjY5fQ.VQjXLSqNKKwcwJ6Ie_QGmReYynqYzJuKxTcRU9M5f0w`
-            },
-        });
-
-        if(!res.ok){
-            throw new Error("Falha ao receber o produto");
-        }
-
-        return res.json();
-
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 export default async function AttProduto({ params }:{ params:attProductParams}){
+
+    const getProductById = async (id: number) => {
+    
+        try {
+            const res = await fetch(`http://localhost:8080/product/${id}`, {
+                cache: "no-store",
+                headers: {
+                    'content-type': 'application/json'
+                },
+            });
+    
+            if(!res.ok){
+                throw new Error("Falha ao receber o produto");
+            }
+            return res.json();
+    
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const { id } = params;
     const response = await getProductById(id);
 
