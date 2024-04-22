@@ -1,5 +1,6 @@
 
 import EstoqueForm from "@/components/EstoqueForm";
+import Header from "@/components/HeaderHome";
 
 type product = {
     id: number;
@@ -37,5 +38,15 @@ export default async function Estoque(){
 
     const thisProducts:product[] = response.products;
 
-    return <EstoqueForm productsPromise={thisProducts}/>
+    return (
+        <div className="h-screen flex flex-col">
+            <div className="flex flex-col">
+                <Header title="Estoque de produtos"/>
+            </div>
+            <div className="flex flex-col gap-2 overflow-y-auto">
+                <EstoqueForm productsPromise={thisProducts}/>
+            </div>
+        </div>
+        
+    )
 }

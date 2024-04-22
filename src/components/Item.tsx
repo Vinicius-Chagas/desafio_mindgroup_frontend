@@ -1,5 +1,9 @@
+
+
 import Link from "next/link";
 import { HiOutlineTrash, HiPencilAlt } from "react-icons/hi";
+
+import RemoveBtn from "./RemoveBtn";
 
 type product = {
     id:number;
@@ -38,40 +42,16 @@ function convertImage(data:number[]):string{
     return `data:image/jpeg;base64,${img64}`;
 }
 
-
 export default async function Item(){
 
-    const response  = await getEstoque();
+    const response = await getEstoque();
 
     const products:product[] = response.estoque;
 
-    const teste = [...products, ...products, ...products, ...products];
-
-    const removeProduct = async(id:number) => {
-        const confirmed = confirm("Realmente deseja deletar este produto?");
     
-        if(confirmed){
-            const res = await fetch(`http://localhost:8080/product/${id}`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json"
-                    }
-                }
-            );
-    
-            if(res.ok){
-                const response  = await getEstoque();
-
-                const products:product[] = response.estoque;
-            }
-            
-        }
-    }
-
-
     return (
         <>
-            {teste.map( (product:product) => (
+            {products.map( (product:product) => (
                 
                 <div key={product.id} className="flex flex-col justify-center">
                     <div
@@ -104,7 +84,7 @@ export default async function Item(){
                                 <HiPencilAlt className="min-[400px]:w-[35px] w-[30px] size-full pt-2 cursor-pointer" />
                             </Link>
                             
-                            <HiOutlineTrash className="min-[400px]:w-[35px] w-[30px] size-full cursor-pointer" color="red"  onClick={(e) => removeProduct(product.id)}/>
+                            <RemoveBtn id={product.id}/>
                         </div>
                     </div>
                 </div>

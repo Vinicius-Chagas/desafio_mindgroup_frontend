@@ -43,10 +43,8 @@ export default function Produto(){
         try {
           const res = await fetch('http://localhost:8080/product', {
             method: 'POST',
-            body: formData,
-            headers: {
-              'content-type': 'application/json'
-              }
+            body: formData
+            
           })
   
           if(!res.ok){

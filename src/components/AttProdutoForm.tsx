@@ -17,7 +17,6 @@ export default function AttProdutoForm({product}:{product:product}){
 
     const router = useRouter();
   
-
     const [newNome, setNome] = useState<string>(product.nome);
     const [newDescricao, setDescricao] = useState<string>(product.descricao);
     const [newValor, setValor] = useState<string>(product.valor);
@@ -53,10 +52,8 @@ export default function AttProdutoForm({product}:{product:product}){
         try {
           const res = await fetch(`http://localhost:8080/attProduct`, {
             method: 'PUT',
-            body: formData,
-            headers: {
-              'content-type': 'application/json'
-              }
+            body: formData
+            
           })
   
           if(!res.ok){
