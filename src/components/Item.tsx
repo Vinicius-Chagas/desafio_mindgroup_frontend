@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { HiOutlineTrash, HiPencilAlt } from "react-icons/hi";
+import { cookies } from "next/headers";
 
 import RemoveBtn from "./RemoveBtn";
 
@@ -18,11 +19,17 @@ type product = {
 
 const getEstoque = async () => {
 
+    const cookiesList = cookies();
+    const token = cookiesList.get('token');
+
     try {
         const res = await fetch("http://localhost:8080/productsEstoque", {
             cache: "no-store",
             headers: {
-                    'content-type': 'application/json'
+                    'content-type': 'application/json',
+                    
+                    'Authorization': `Bearer ${token?.value}`
+                     
             }
         })
 

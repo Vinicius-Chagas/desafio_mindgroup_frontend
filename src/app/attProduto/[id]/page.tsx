@@ -1,6 +1,6 @@
-import Cookies from 'js-cookie';
+import { cookies } from "next/headers";
 import AttProdutoForm from "@/components/AttProdutoForm";
-import { useRouter } from "next/router";
+
 
 type attProductParams = {
     id: number;
@@ -17,12 +17,18 @@ type product = {
 export default async function AttProduto({ params }:{ params:attProductParams}){
 
     const getProductById = async (id: number) => {
+
+        const cookiesList = cookies();
+        const token = cookiesList.get('token');
     
         try {
             const res = await fetch(`http://localhost:8080/product/${id}`, {
                 cache: "no-store",
                 headers: {
-                    'content-type': 'application/json'
+                    'content-type': 'application/json',
+                    
+                    'Authorization': `Bearer ${token?.value}`
+                      
                 },
             });
     

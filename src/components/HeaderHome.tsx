@@ -5,10 +5,11 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 
 
-export default function Header({title}:{title:string}){
+export default function Header({title, path}:{title:string, path:string}){
 
     const router = useRouter();
 
+   
     return (
         <div className="min-h-[50px] flex flex-col justify-center ">
 
@@ -17,7 +18,7 @@ export default function Header({title}:{title:string}){
                 md:space-y-0 rounded-xl p-3 md:w-2/4 w-2/3 min-h-[50px] mx-auto min-w-[400px] ">
                     <div className="mt-[5px] flex flex-row justify-between w-full">
                         
-                        <FaArrowLeft className="cursor-pointer" onClick={router.back} size={25}/>
+                        <FaArrowLeft className="cursor-pointer" onClick={(e) => router.push(path)} size={25}/>
 
                         <p>{title}</p>
 

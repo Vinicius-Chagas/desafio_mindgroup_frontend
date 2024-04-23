@@ -2,16 +2,17 @@
 
 import { useState, useContext } from "react";
 import { useRouter } from "next/navigation"
-import { AuthContext } from "../app/provider/AuthProvider";
-import {setCookie, parseCookies} from 'nookies'
+import Cookies from "js-cookie";
 
 
 export default function Login(){
   const router = useRouter();
+  
+  Cookies.remove('token');
 
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
-  const { login } = useContext(AuthContext);
+
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
       e.preventDefault();
@@ -40,10 +41,7 @@ export default function Login(){
         else {
           
           const data = await res.json();
-          setCookie(undefined,'auth_token', data.token); 
-          const cookies = parseCookies();
-
-          console.log({teste:cookies});
+          Cookies.set('token', data.token); 
     
           router.push("/home");
           
@@ -66,7 +64,9 @@ export default function Login(){
                 type="text" 
                 name="email" 
                 onChange={(e) => setEmail(e.target.value)}
-                className="py-2 px-3 border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm disabled:bg-gray-100 mt-1 block w-full" />
+                className="py-2 px-3 border border-gray-300 
+                focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200 
+                focus:ring-opacity-50 rounded-md shadow-sm disabled:bg-gray-100 mt-1 block w-full" />
             </div>
             <div className="mb-4">
               <label className="block mb-1" htmlFor="password">Senha</label>
@@ -75,10 +75,13 @@ export default function Login(){
                 type="password" 
                 name="password" 
                 onChange={(e) => setSenha(e.target.value)}
-                className="py-2 px-3 border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm disabled:bg-gray-100 mt-1 block w-full" />
+                className="py-2 px-3 border border-gray-300 focus:border-red-300 focus:outline-none 
+                focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm disabled:bg-gray-100 mt-1 block w-full" />
             </div>
             <div className="mt-6">
-              <button type="submit" className="w-full inline-flex items-center justify-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-red-700 active:bg-red-700 focus:outline-none focus:border-red-700 focus:ring focus:ring-red-200 disabled:opacity-25 transition">Log In</button>
+              <button type="submit" className="w-full inline-flex items-center justify-center px-4 py-2 bg-red-600 
+              border border-transparent rounded-md font-semibold capitalize text-white hover:bg-red-700 active:bg-red-700 focus:outline-none 
+              focus:border-red-700 focus:ring focus:ring-red-200 disabled:opacity-25 transition">Log In</button>
             </div>
             <div className="mt-6 text-center">
               <a href="/register" className="underline">Não tem uma conta? Crie uma!</a>

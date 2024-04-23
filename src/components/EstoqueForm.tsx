@@ -1,8 +1,8 @@
 "use client";
 
-import Cookies from 'js-cookie';
 import { useRouter } from "next/navigation";
-import { useContext, useState } from "react";
+import { useState } from "react";
+import Cookies from "js-cookie";
  
 type product = {
     id: number;
@@ -26,7 +26,7 @@ type product = {
 
         e.preventDefault();
 
-        console.log({selectedProductId, selectedOperation, total});
+        const token = Cookies.get('token');
 
         if(selectedProductId == null || !total || selectedOperation == null){
           alert("Todos os campos são obrigatórios");
@@ -39,7 +39,10 @@ type product = {
           const res = await fetch('http://localhost:8080/estoque', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json' 
+                'Content-Type': 'application/json',
+
+                'Authorization': `Bearer ${token}`
+
               },
             body: JSON.stringify({
                 idString: selectedProductId,
@@ -53,7 +56,8 @@ type product = {
           }
           else {
             alert('Estoque registrado com sucesso');
-            router.push("/home")
+            router.push("/home");
+            router.refresh();
           }
         
         } catch (error) {

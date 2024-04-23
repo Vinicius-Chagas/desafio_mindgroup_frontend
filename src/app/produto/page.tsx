@@ -1,8 +1,9 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Header from "@/components/HeaderHome";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 type product = {
     nome:string;
@@ -40,12 +41,16 @@ export default function Produto(){
           formData.append("image", newImage);
         }
         
+        const token = Cookies.get('token');
+
         try {
           const res = await fetch('http://localhost:8080/product', {
             method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
             body: formData
-            
-          })
+          });
   
           if(!res.ok){
             throw new Error('Falha ao registrar novo produto');
@@ -53,6 +58,7 @@ export default function Produto(){
           else {
             alert('Produto cadastrado com sucesso');
             router.push('/home');
+            router.refresh();
           }
         
         } catch (error) {
@@ -63,7 +69,7 @@ export default function Produto(){
     return (
         <div className="w-full min-h-screen bg-gray-50 flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
             <div className="fixed top-0 bg-gray-50">
-                <Header title="Novo item"/>
+                <Header title="Novo item" path="/home"/>
             </div>
         <div className="w-full sm:max-w-md p-5 mx-auto mt-[50px]">
         <div className="justify-center flex w-full h-[150px]">

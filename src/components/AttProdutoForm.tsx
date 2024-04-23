@@ -3,6 +3,7 @@
 import { useContext, useState } from "react";
 import Header from "@/components/HeaderHome";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 type product = {
     id:number;
@@ -48,10 +49,15 @@ export default function AttProdutoForm({product}:{product:product}){
         if(newImage){
           formData.append("image", newImage);
         }
+
+        const token = Cookies.get('token');
         
         try {
           const res = await fetch(`http://localhost:8080/attProduct`, {
             method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
             body: formData
             
           })
@@ -62,6 +68,7 @@ export default function AttProdutoForm({product}:{product:product}){
           else {
             alert('Produto atualizado com sucesso');
             router.push("/home");
+            router.refresh();
           }
         
         } catch (error) {
@@ -72,7 +79,7 @@ export default function AttProdutoForm({product}:{product:product}){
     return (
         <div className="w-full min-h-screen bg-gray-50 flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
             <div className="fixed top-0 bg-gray-50">
-                <Header title="Novo item"/>
+                <Header title="Novo item" path="/home"/>
             </div>
         <div className="w-full sm:max-w-md p-5 mx-auto mt-[50px]">
         <div className="justify-center flex w-full h-[150px]">
