@@ -19,19 +19,19 @@ export default function RemoveBtn({ id } : { id:number }) {
         if(confirmed){
 
             try {
-                router.refresh();
 
                 const res = await fetch(`http://localhost:8080/product/${id}`, {
                     method: "DELETE",
                     headers: {
                         'Authorization': `Bearer ${token}`
-                    },
                     }
+                }
                 );
                 if(!res.ok){
                     const data: {error:string} = await res.json();
                     throw new Error(data.error);
                 }
+                router.refresh();
             } catch (error) {
                 alert(error);
             }
