@@ -33,12 +33,13 @@ export default async function AttProduto({ params }:{ params:attProductParams}){
             });
     
             if(!res.ok){
-                throw new Error("Falha ao receber o produto");
+                const data: {error:string} = await res.json();
+                throw new Error(data.error);
             }
             return res.json();
     
         } catch (error) {
-            console.log(error);
+            alert(error);
         }
     }
 

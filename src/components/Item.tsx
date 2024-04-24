@@ -34,12 +34,13 @@ const getEstoque = async () => {
         })
 
         if(!res.ok){
-            throw new Error("Falha ao buscar produtos");
+            const data: {error:string} = await res.json();
+            throw new Error(data.error);
         }
 
         return await res.json();
     } catch (error) {
-        console.log(error);
+        alert(error);
     }
 }
 
@@ -90,8 +91,10 @@ export default async function Item(){
                             <Link href={`/attProduto/${product.id}`}>
                                 <HiPencilAlt className="min-[400px]:w-[35px] w-[30px] size-full pt-2 cursor-pointer" />
                             </Link>
+                            <div>
+                                <RemoveBtn id={product.id}/>
+                            </div>
                             
-                            <RemoveBtn id={product.id}/>
                         </div>
                     </div>
                 </div>

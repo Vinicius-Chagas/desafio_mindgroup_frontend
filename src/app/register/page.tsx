@@ -43,12 +43,13 @@ const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
             router.push('/');
         }
         else{
-            throw new Error('Falha ao registrar usuário');
+            const data: {error:string} = await res.json();
+            throw new Error(data.error);
         }
 
 
     } catch (error) {
-        console.log(error);
+        alert(error);
     }
 }
 

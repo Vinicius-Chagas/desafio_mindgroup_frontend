@@ -36,7 +36,8 @@ export default function Login(){
         })
 
         if(!res.ok){
-          throw new Error('Falha ao registrar usuário');
+          const data: {error:string} = await res.json();
+          throw new Error(data.error);
         }
         else {
           
@@ -48,7 +49,7 @@ export default function Login(){
         }
       
       } catch (error) {
-        console.log(error);
+        alert(error);
       }
   }
 

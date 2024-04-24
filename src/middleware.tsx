@@ -11,7 +11,7 @@ export function middleware(request:any) {
   const cookiesList = cookies();
   const token = cookiesList.get('token');
 
-  if (!token && request.nextUrl.pathname !== '/') {
+  if (!token && request.nextUrl.pathname !== '/' && request.nextUrl.pathname !== '/register') {
     const url = 'http://localhost:3000'
 
     return NextResponse.redirect(url);

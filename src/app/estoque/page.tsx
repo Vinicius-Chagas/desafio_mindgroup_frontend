@@ -29,12 +29,13 @@ const getProducts = async () => {
         })
 
         if(!res.ok){
-            throw new Error("Falha ao buscar produtos");
+            const data: {error:string} = await res.json();
+            throw new Error(data.error);
         }
 
         return await res.json();
     } catch (error) {
-        console.log(error);
+        alert(error);
     }
 }
 
@@ -46,11 +47,11 @@ export default async function Estoque(){
     const thisProducts:product[] = response.products;
 
     return (
-        <div className="h-screen flex flex-col">
+        <div className="h-screen w-screen flex flex-col absolute">
             <div className="flex flex-col">
                 <Header title="Estoque de produtos" path="/home"/>
             </div>
-            <div className="flex flex-col gap-2 overflow-y-auto">
+            <div className="flex flex-col gap-2">
                 <EstoqueForm productsPromise={thisProducts}/>
             </div>
         </div>

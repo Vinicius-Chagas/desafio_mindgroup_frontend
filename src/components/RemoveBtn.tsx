@@ -17,15 +17,25 @@ export default function RemoveBtn({ id } : { id:number }) {
         const confirmed = confirm("Realmente deseja deletar este produto?");
 
         if(confirmed){
-            router.refresh();
 
-            const res = await fetch(`http://localhost:8080/product/${id}`, {
-                method: "DELETE",
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                  },
+            try {
+                router.refresh();
+
+                const res = await fetch(`http://localhost:8080/product/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    }
+                );
+                if(!res.ok){
+                    const data: {error:string} = await res.json();
+                    throw new Error(data.error);
                 }
-            )
+            } catch (error) {
+                alert(error);
+            }
+            
         }
     }
 

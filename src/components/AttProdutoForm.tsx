@@ -63,7 +63,8 @@ export default function AttProdutoForm({product}:{product:product}){
           })
   
           if(!res.ok){
-            throw new Error('Falha ao atualizar produto');
+            const data: {error:string} = await res.json();
+            throw new Error(data.error);
           }
           else {
             alert('Produto atualizado com sucesso');
@@ -72,7 +73,7 @@ export default function AttProdutoForm({product}:{product:product}){
           }
         
         } catch (error) {
-          console.log(error);
+          alert(error);
         }
     }
 
